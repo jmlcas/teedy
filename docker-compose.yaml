@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+
+  teedy:
+    image: jdreinhardt/teedy:latest
+    restart: unless-stopped
+    depends_on: 
+      - teedy_db
+    ports:
+      - "8200:8080"
+    volumes:
+      - ./data:/data
+    environment:
+      - JAVA_OPTIONS=-Xmx1024m
+      - OCR_LANGS=spa
+      - DATABASE_USER=user
+      - DATABASE_PASSWORD=p4ssw0rd
+    networks:
+      - teedy
+
+  teedy_db:
+    image: postgres:13.1-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=p4ssw0rd
+      - POSTGRES_DB=teedy
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - teedy
+
+networks:
+  teedy:  
+
+       
